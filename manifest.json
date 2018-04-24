@@ -1,0 +1,25 @@
+{
+    "manifest_version": 2,
+    "name": "validateStringCreater",
+    "version": "1",
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+    "permissions": [
+        "tabs",
+        "notifications",
+        "http://*/",
+        "https://*/"
+    ],
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+    "icons": {
+        "16": "images/hokke.png",
+        "64": "images/hokke.png",
+        "96": "images/hokke.png",
+        "128": "images/hokke.png"
+    }
+}
