@@ -73,25 +73,9 @@ class Query {
         })();`;
     }
 }
-// const type = {
-//     hankaku: {
-//         hankakuSAlphabet: "abcdefghijklmnopqrstuvwxyz",
-//         hankakuLAlphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-//         hankakuSuuji: "0123456789",
-//         hankakuKatakana: "ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ",
-//         hankakuKigou: "!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
-//     },
-//     zenkaku: {
-//         zenkakuSAlphabet: "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ",
-//         zenkakuLAlphabet: "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ",
-//         zenkakuSuuji: "０１２３４５６７８９",
-//         zenkakuKatakana: "ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶ",
-//         zenkakuHiragana: "ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをん",
-//         zenkakuKigou: "　、。，．・：；？！゛゜´｀¨＾￣＿ヽヾゝゞ〃仝々〆〇ー―‐／＼～∥｜…‥‘’“”（）〔〕［］｛｝〈〉《》「」『』【】＋－±×÷＝≠＜＞≦≧∞∴♂♀°′″℃￥＄￠￡％＃＆＊＠§☆★○●◎◇◆□■△▲▽▼※〒→←↑↓〓∈∋⊆⊇⊂⊃∪∩∧∨￢⇒⇔∀∃∠⊥⌒∂∇≡≒≪≫√∽∝∵∫∬Å‰♯♭♪ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψωАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя─│┌┐┘└├┬┤┴┼━┃┏┓┛┗┣┳┫┻╋┠┯┨┷┿┝┰┥┸╂｡｢｣､･①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㎜㎝㎞㎎㎏㏄㎡　㍻〝〟№㏍℡㊤㊥㊦㊧㊨㈱㈲㈹㍾㍽㍼≒≡∫∮∑√⊥∠∟⊿∵∩∪"
-//     }
-// };
 
-const type2 = {
+
+const type = {
     hankakuSAlphabet: "abcdefghijklmnopqrstuvwxyz",
     hankakuLAlphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     hankakuSuuji: "0123456789",
@@ -116,7 +100,8 @@ const typeName = [
     "全角数字",
     "全角カタカナ",
     "全角ひらがな",
-    "全角記号"
+    "全角記号",
+    "複合"
 ];
 const stringUtils = new StringUtils();
 {
@@ -129,7 +114,7 @@ const stringUtils = new StringUtils();
         var arr = Array.from(tag.getElementsByTagName('*'));
         arr.forEach((elm) => {
             if (!!elm.name && elm.style.display != 'none') {
-                var val = document.createElement("option");
+                const val = document.createElement("option");
                 val.value = elm.name;
                 val.innerText = elm.name;
                 document.getElementById("target").appendChild(val);
@@ -156,9 +141,7 @@ document.getElementById('seisei').addEventListener('click', event => {
     if (val.length <= 0 || isNaN(val)) {
         return;
     }
-    console.log(makeString2(Number(val)));
-
-    var arr = makeString(type.hankaku, Number(val)).concat(makeString(type.zenkaku, Number(val / 2 | 0)));
+    var arr = makeString(Number(val)).concat(makeString2(Number(val)));
     var btnArr = [];
     var obj = arr.map(function (string, index) {
         btnArr.push(typeName[index] + 'Button');
@@ -216,24 +199,10 @@ class ContrastCanvas {
 
 
 
-function makeString(object, limit) {
-    // var arr = [];
-
-    return Object.keys(type2).map((key => {
-        return stringUtils.stringCreater("", limit, type2[key]);
-    }))
-
-    // for (var key in object) {
-    //     if (object.hasOwnProperty(key)) {
-    //         var str = "";
-    //         for (i = 0; i < limit; i++) {
-    //             var randomize = Math.floor(Math.random() * (object[key].length - 1));
-    //             str += object[key].substring(randomize, randomize + 1);
-    //         }
-    //         arr.push(str);
-    //     }
-    // }
-    // return arr;
+function makeString(limit) {
+    return Object.keys(type).map((key => {
+        return stringUtils.stringCreater("", limit, type[key]);
+    }));
 }
 
 function makeString2(limit) {
@@ -245,7 +214,7 @@ function makeString2(limit) {
     }
     const bool = arr.length > limit;
     const types = arr.map((elm) => {
-        return type2[elm.value];
+        return type[elm.value];
     });
 
 
